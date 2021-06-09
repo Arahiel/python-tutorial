@@ -147,7 +147,7 @@ def for_loop_2():
         print("{0}:{1}".format(i, c))
 
 
-if __name__ == '__main__':
+def basic_methods():
     # print_hi('PyCharm')
     # call_action_times(lambda x: print(x), 3)
     # loops()
@@ -174,4 +174,76 @@ if __name__ == '__main__':
 
     r3 = my_class.Rectangle(10, 30)
     print("{0} is {1}lower than {2}".format("r1", "" if r1 < r3 else "not ", "r3"))
+
+
+def unpacking():
+    l1 = [1, 2, 3, 4]
+    l2 = [5, 6, 7]
+
+    # Działa jak SelectMany z C#
+    l3 = [*l1, *l2]
+    a, *b, c = l1
+    print(a, b, c)
+    print(l3)
+
+
+def doc_annotated_function(a: int, b: str) -> str:
+    """This is a documentation string"""
+    return str(a) + b
+
+
+# map() działa podobnie jak Select w C#. Przechodzi po *iterables oraz aplikuje podaną funkcję na każdym elemencie.
+# Zwraca te same iterables (iterator dokładnie) po zaaplikowaniu funkcji na ich elementach
+def map1():
+    l = [1, 2, 3]
+    print(list(map(lambda x: x ** 2, l)))
+
+
+# Można podać wiele iterables, bo map(*iterables, l) ma w parametrze gwiazdkę
+def map2():
+    l = [1, 2, 3]
+    k = [4, 5, 6]
+    print(list(map(lambda x, y: x + y, l, k)))
+
+
+# Działa jak Where z C#. Podaje się pojedyncze iterable, oraz predykat. Filter zachowuje elementy, gdy funkcja predykatu
+# dla danego elementu zwróci wartość True. Zwraca przefiltrowane iterables (iterator dokładnie)
+def filter1():
+    l = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    print(list(filter(lambda x: x % 2 == 0, l)))
+
+
+# Łączy elementy ze wszystkich podanych *iterables w tuples
+def zip1():
+    l = [1, 2, 3]
+    k = [4, 5, 6]
+    # j = ["p", "y", "t"]
+    j = "python"
+    print(list(zip(l, k, j)))
+
+
+# Łączy funkcjonalność map oraz filter.Syntax: newlist = [expression for item in iterable if condition == True]. IF jest opcjonalny!
+def list_comprehension():
+    x = [1, 2, 3]
+    y = [4, 5, 6]
+    print([l + k for l, k in zip(x, y) if k % 2 == 0])
+
+    # Zamiast nawiasów kwadratowych "[]" można użyć normalnych "()", przez co tworzymy generator, a nie listę.
+    # Generatory są szybsze od list, gdyż zwracają iterator nie obliczając żadnych elementów (jak IEnumerable w C#).
+    # Dopiero po wywołaniu/żądaniu elementu z generatora zostaje on obliczony. Po wywołaniu elementu z generatora
+    # iterator się przesuwa, przez co tracimy dostęp do zużytego elementu. Aby go zachować, należy go zapisać
+    # np. w liście. Generatory, tak jak IEnumerable są bardzo szybkie, gdyż nie obliczają nic aż do żądania danych.
+    for i in (l + k for l, k in zip(x, y) if k % 2 == 0):
+        print(i)
+
+
+if __name__ == '__main__':
+    # basic_methods()
+    # unpacking()
+    # x = doc_annotated_function(5, "x")
+    # map1()
+    # map2()
+    # filter1()
+    # zip1()
+    list_comprehension()
 
