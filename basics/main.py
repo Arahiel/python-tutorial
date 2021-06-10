@@ -1,3 +1,6 @@
+from functools import partial
+from functools import reduce
+
 import my_class
 
 
@@ -213,7 +216,7 @@ def filter1():
     print(list(filter(lambda x: x % 2 == 0, l)))
 
 
-# Łączy elementy ze wszystkich podanych *iterables w tuples
+# Łączy elementy ze wszystkich podanych *iterables w tuple
 def zip1():
     l = [1, 2, 3]
     k = [4, 5, 6]
@@ -222,7 +225,8 @@ def zip1():
     print(list(zip(l, k, j)))
 
 
-# Łączy funkcjonalność map oraz filter.Syntax: newlist = [expression for item in iterable if condition == True]. IF jest opcjonalny!
+# Łączy funkcjonalność map oraz filter.Syntax: newlist = [expression for item in iterable if condition == True].
+# IF jest opcjonalny!
 def list_comprehension():
     x = [1, 2, 3]
     y = [4, 5, 6]
@@ -237,6 +241,46 @@ def list_comprehension():
         print(i)
 
 
+# reduce to funkcja agregująca elementy w jeden wynik. W C# to Aggregate z LINQ. Można to przerobić na każdą inną
+# funkcję agregującą z C# LINQ, jak np. Sum, Max, Average. Python zawiera wiele wbudowanych funkcji bazujących na
+# reduce. Przykłady: min, max, sum, any, all
+
+def reduce1():
+    l1 = [1, 2, 3, 4]
+    print(reduce(lambda x, y: x + y, l1))  # Sum
+    print(sum(l1))  # Built-in Sum
+    print(reduce(lambda x, y: x if x > y else y, l1))  # Max
+
+
+def factory(n):
+    # "1" na końcu jest opcjonalną wartością początkową (na początku jest przemnożona (ze wzg. na użytą lambdę) przez
+    # pierwszy element z range(1, n + 1)
+    return reduce(lambda x, y: x * y, range(1, n + 1), 1)
+
+
+def first_or_default(iterable, predicate):
+    return next((x for x in iterable if predicate(x)), None)  # None jest wartością domyślną w przypadku exceptiona
+
+
+# Partial służy do redukcji argumentów funkcji
+def partial1():
+    square = partial(pow, exp=2)
+    print(square(3))
+
+    # Jeżeli budujemy partiala przekazując zmienną, to musimy uważać na to, że jeżeli
+    # ta zmienna jest immutable - to jej zmiana nie zmieni partiala!
+    # ta zmienna jest mutable - to jej zmiana zmieni również wynik partiala
+    # polega to na tym, że przekazując zmienna przekazujemy tak naprawdę jej adres, a w przypadku zmiany immutable
+    # jej adres się zmienia, ale adres zmiennej przekazanej do partiala nie!
+
+    a = 2 # immutable
+    square = partial(pow, exp=a)  # -> 3 ** 2 = 9
+    print(square(3))
+
+    a = 3
+    print(square(3))  # -> nadal 3 ** 2 = 9
+
+
 if __name__ == '__main__':
     # basic_methods()
     # unpacking()
@@ -245,5 +289,11 @@ if __name__ == '__main__':
     # map2()
     # filter1()
     # zip1()
-    list_comprehension()
+    # list_comprehension()
+    # reduce1()
+    # print(factory(6))
 
+    # result = first_or_default([1, 2, 3, 4], lambda x: x > 2)
+    # print(result)
+
+    partial1()
