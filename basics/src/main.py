@@ -1,6 +1,7 @@
 from functools import partial
 from functools import reduce
 
+import random
 import my_class
 
 
@@ -56,7 +57,7 @@ def enter_name_loop():
     while True:
         name = input("Please enter the name: ")
         if len(name) >= min_length and name.isprintable() and name.isalpha():
-            break;
+            break
     print("Hello, {0} ".format(name))
 
 
@@ -176,7 +177,8 @@ def basic_methods():
     print("Same values? (r1 == r2): ", r1 == r2)
 
     r3 = my_class.Rectangle(10, 30)
-    print("{0} is {1}lower than {2}".format("r1", "" if r1 < r3 else "not ", "r3"))
+    print("{0} is {1}lower than {2}".format(
+        "r1", "" if r1 < r3 else "not ", "r3"))
 
 
 def unpacking():
@@ -193,6 +195,17 @@ def unpacking():
 def doc_annotated_function(a: int, b: str) -> str:
     """This is a documentation string"""
     return str(a) + b
+
+
+def sort():
+    l = [2, 5, 4, 6, 8, 9, 10, 1]
+    print(l)
+    print(sorted(l))
+
+
+def shuffle():
+    l = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    print(sorted(l, key=lambda x: random.random()))
 
 
 # map() działa podobnie jak Select w C#. Przechodzi po *iterables oraz aplikuje podaną funkcję na każdym elemencie.
@@ -259,7 +272,8 @@ def factory(n):
 
 
 def first_or_default(iterable, predicate):
-    return next((x for x in iterable if predicate(x)), None)  # None jest wartością domyślną w przypadku exceptiona
+    # None jest wartością domyślną w przypadku exceptiona
+    return next((x for x in iterable if predicate(x)), None)
 
 
 # Partial służy do redukcji argumentów funkcji
@@ -273,18 +287,25 @@ def partial1():
     # polega to na tym, że przekazując zmienna przekazujemy tak naprawdę jej adres, a w przypadku zmiany immutable
     # jej adres się zmienia, ale adres zmiennej przekazanej do partiala nie!
 
-    a = 2 # immutable
+    a = 2  # immutable
     square = partial(pow, exp=a)  # -> 3 ** 2 = 9
     print(square(3))
 
     a = 3
     print(square(3))  # -> nadal 3 ** 2 = 9
 
+global_var = "GLobal"
+def modify_global_var():
+    global global_var # Użyj globalnej zmiennej zamiast deklarować lokalną o takiej samej nazwie! (shadowing)
+    global_var = "GLobal changed!"
+
 
 if __name__ == '__main__':
     # basic_methods()
     # unpacking()
     # x = doc_annotated_function(5, "x")
+    # sort()
+    # shuffle()
     # map1()
     # map2()
     # filter1()
@@ -296,4 +317,9 @@ if __name__ == '__main__':
     # result = first_or_default([1, 2, 3, 4], lambda x: x > 2)
     # print(result)
 
-    partial1()
+    # partial1()
+
+    modify_global_var()
+    print(global_var)
+    
+    
