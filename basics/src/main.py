@@ -349,7 +349,7 @@ def counter(fn):
     return inner
 
 # Sparametryzowany dekorator składa się z: dekoratora zewnętrznego z argumentem (timed(n)), dekoratora właściwego przyjmującego funkcję do dekoracji (inner_decorator(fn)), 
-# a także funkcji wrapującej (inner(*args, **kwargs))
+# a także funkcji wrapującej (inner(*args, **kwargs)).
 def timed(n: int = 1) -> float:
     """Get average execution time of passed function through n executions"""
     def inner_decorator(fn):
@@ -381,7 +381,9 @@ def timed(n: int = 1) -> float:
     return inner_decorator
 
 
-# Kolejność dekoratorów ma znaczenie! Im dekorator jest wyżej w kolejności, tym później się wykonuje.
+# Kolejność dekoratorów ma znaczenie! Im dekorator jest wyżej w kolejności, tym wcześniej się wykonuje, ALE kolejność printów zależy od miejsca wypisania w kodzie
+# Jest to syntax działający jak: decorated_add = counter(timed(decorated_add))
+# parametr n jest domyślnie ustawiony na n=1
 @counter
 @timed() # Sparametryzowany dekorator musi być użyty z nawiasami (nawet z opcjonalnym parametrem)
 def decorated_add(a, b):
