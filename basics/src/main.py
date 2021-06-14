@@ -348,10 +348,8 @@ def counter(fn):
         return fn(*args, **kwargs)
     return inner
 
-# Sparametryzowany dekorator składa się z: dekoratora zewnętrznego z argumentem (timed(n)), dekoratora właściwego przyjmującego funkcję do dekoracji (inner_decorator(fn))
+# Sparametryzowany dekorator składa się z: dekoratora zewnętrznego z argumentem (timed(n)), dekoratora właściwego przyjmującego funkcję do dekoracji (inner_decorator(fn)), 
 # a także funkcji wrapującej (inner(*args, **kwargs))
-
-
 def timed(n: int = 1) -> float:
     """Get average execution time of passed function through n executions"""
     def inner_decorator(fn):
