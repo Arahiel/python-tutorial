@@ -299,6 +299,29 @@ def modify_global_var():
     global global_var # Użyj globalnej zmiennej zamiast deklarować lokalną o takiej samej nazwie! (shadowing)
     global_var = "GLobal changed!"
 
+c = dict()
+def counter(fn, dictionary):
+    cnt = 0
+    def inner(*args, **kwargs):
+        nonlocal cnt # Użyj zmiennej zadeklarowanej w wyższym scope (nie globalnym!)
+        cnt += 1
+        dictionary[fn.__name__] = cnt
+        return fn(*args, **kwargs)
+    return inner
+
+def closure_1():
+    def mult(a, b):
+        return a * b
+    def add(a, b):
+        return a + b
+
+    counted_add = counter(add, c)
+    counted_mult = counter(mult, c)
+
+    print(counted_add(1, 2))
+    print(counted_add(2, 2))
+    print(counted_mult(5, 2))
+    print(c)
 
 if __name__ == '__main__':
     # basic_methods()
@@ -319,7 +342,7 @@ if __name__ == '__main__':
 
     # partial1()
 
-    modify_global_var()
-    print(global_var)
+    # modify_global_var()
+    # print(global_var)
     
-    
+    closure_1()
