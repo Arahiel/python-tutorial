@@ -1,5 +1,6 @@
 from functools import partial
 from functools import reduce
+from functools import wraps
 
 import random
 import my_class
@@ -294,34 +295,105 @@ def partial1():
     a = 3
     print(square(3))  # -> nadal 3 ** 2 = 9
 
+
 global_var = "GLobal"
+
+
 def modify_global_var():
-    global global_var # Użyj globalnej zmiennej zamiast deklarować lokalną o takiej samej nazwie! (shadowing)
+    # Użyj globalnej zmiennej zamiast deklarować lokalną o takiej samej nazwie! (shadowing)
+    global global_var
     global_var = "GLobal changed!"
 
+
 c = dict()
-def counter(fn, dictionary):
+
+
+def counter_dict(fn, dictionary):
     cnt = 0
+
     def inner(*args, **kwargs):
-        nonlocal cnt # Użyj zmiennej zadeklarowanej w wyższym scope (nie globalnym!)
+        # Użyj zmiennej zadeklarowanej w wyższym scope (nie globalnym!)
+        nonlocal cnt
         cnt += 1
         dictionary[fn.__name__] = cnt
         return fn(*args, **kwargs)
     return inner
 
+
 def closure_1():
     def mult(a, b):
         return a * b
+
     def add(a, b):
         return a + b
 
-    counted_add = counter(add, c)
-    counted_mult = counter(mult, c)
+    counted_add = counter_dict(add, c)
+    counted_mult = counter_dict(mult, c)
 
     print(counted_add(1, 2))
     print(counted_add(2, 2))
     print(counted_mult(5, 2))
     print(c)
+
+
+# Decorator function
+def counter(fn):
+    cnt = 0
+
+    @wraps(fn)
+    def inner(*args, **kwargs):
+        nonlocal cnt
+        cnt += 1
+        print("{0} was called {1} times".format(fn.__name__, cnt))
+        return fn(*args, **kwargs)
+    return inner
+
+# Sparametryzowany dekorator składa się z: dekoratora zewnętrznego z argumentem (timed(n)), dekoratora właściwego przyjmującego funkcję do dekoracji (inner_decorator(fn))
+# a także funkcji wrapującej (inner(*args, **kwargs))
+
+
+def timed(n: int = 1) -> float:
+    """Get average execution time of passed function through n executions"""
+    def inner_decorator(fn):
+        from time import perf_counter
+        from functools import wraps
+
+        @wraps(fn)
+        def inner(*args, **kwargs):
+            elapsed_total = 0
+            elapsed_count = 0
+
+            for i in range(n):
+                start = perf_counter()
+                result = fn(*args, **kwargs)
+                end = perf_counter()
+                elapsed_total += end - start
+                elapsed_count += 1
+
+            args_ = [str(a) for a in args]
+            kwargs_ = ["{0}={1}".format(k, v) for (k, v) in kwargs.items()]
+            all_args = args_ + kwargs_
+            args_str = ",".join(all_args)
+
+            print("{0}({1}) took {2:.6f}s to run through {3} executions.".format(
+                fn.__name__, args_str, elapsed_total / elapsed_count, elapsed_count))
+
+            return result
+        return inner
+    return inner_decorator
+
+
+# Kolejność dekoratorów ma znaczenie! Im dekorator jest wyżej w kolejności, tym później się wykonuje.
+@counter
+@timed() # Sparametryzowany dekorator musi być użyty z nawiasami (nawet z opcjonalnym parametrem)
+def decorated_add(a, b):
+    return a + b
+
+
+@timed(5)  # Sparametryzowany dekorator
+def fibonacci_reduce(n):
+    return reduce(lambda prev, n: (prev[0] + prev[1], prev[0]), range(n), (1, 0))[0]
+
 
 if __name__ == '__main__':
     # basic_methods()
@@ -344,5 +416,11 @@ if __name__ == '__main__':
 
     # modify_global_var()
     # print(global_var)
-    
-    closure_1()
+
+    # closure_1()
+
+    # print(decorated_add(1, 2))
+    # Z użyciem functools.wraps wskazuje na poprawną funkcję. Bez wraps wskazuję niepoprawnie na funkcję inner!
+    # help(decorated_add)
+
+    print(fibonacci_reduce(5))
