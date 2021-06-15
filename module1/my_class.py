@@ -1,3 +1,6 @@
+from module2.decorators import log_all
+
+@log_all
 class Rectangle:
     def __init__(self, width, height):
         self.width = width
@@ -31,6 +34,9 @@ class Rectangle:
     def perimeter(self):
         return 2 * self.width + 2 * self.height
 
+    def message(self, text):
+        print(text)
+
     def __str__(self) -> str:
         return "Rectangle: width: {0}, height: {1}".format(self.width, self.height)
 
@@ -45,7 +51,3 @@ class Rectangle:
             return self.area() < other.area()
         else:
             return NotImplemented
-
-    def __call__(self, c):
-        print("Class called: height={0}, width={1}, c={2}".format(self.height, self.width, c))
-        

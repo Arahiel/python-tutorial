@@ -2,6 +2,7 @@ from functools import partial
 from functools import reduce
 from functools import wraps
 from module1.my_class import *
+from module2.decorators import *
 
 import random
 
@@ -335,49 +336,6 @@ def closure_1():
     print(c)
 
 
-# Decorator function
-def counter(fn):
-    cnt = 0
-
-    @wraps(fn)
-    def inner(*args, **kwargs):
-        nonlocal cnt
-        cnt += 1
-        print("{0} was called {1} times".format(fn.__name__, cnt))
-        return fn(*args, **kwargs)
-    return inner
-
-# Sparametryzowany dekorator składa się z: dekoratora zewnętrznego z argumentem (timed(n)), dekoratora właściwego przyjmującego funkcję do dekoracji (inner_decorator(fn)),
-# a także funkcji wrapującej (inner(*args, **kwargs)).
-def timed(n: int = 1) -> float:
-    """Get average execution time of passed function through n executions"""
-    def inner_decorator(fn):
-        from time import perf_counter
-        from functools import wraps
-
-        @wraps(fn)
-        def inner(*args, **kwargs):
-            elapsed_total = 0
-
-            for i in range(n):
-                start = perf_counter()
-                result = fn(*args, **kwargs)
-                end = perf_counter()
-                elapsed_total += end - start
-
-            args_ = [str(a) for a in args]
-            kwargs_ = ["{0}={1}".format(k, v) for (k, v) in kwargs.items()]
-            all_args = args_ + kwargs_
-            args_str = ",".join(all_args)
-
-            print("{0}({1}) took {2:.6f}s to run through {3} executions.".format(
-                fn.__name__, args_str, elapsed_total / n, n))
-
-            return result
-        return inner
-    return inner_decorator
-
-
 # Kolejność dekoratorów ma znaczenie! Im dekorator jest wyżej w kolejności, tym wcześniej się wykonuje, ALE kolejność printów zależy od miejsca wypisania w kodzie
 # Jest to syntax działający jak: decorated_add = counter(timed(decorated_add))
 # parametr n jest domyślnie ustawiony na n=1
@@ -391,6 +349,9 @@ def decorated_add(a, b):
 def fibonacci_reduce(n):
     return reduce(lambda prev, n: (prev[0] + prev[1], prev[0]), range(n), (1, 0))[0]
 
+@DecoratorClass(10, 20)
+def cl_decorated(x):
+    print("Function: {0}".format(x))
 
 if __name__ == '__main__':
     # basic_methods()
@@ -422,5 +383,8 @@ if __name__ == '__main__':
 
     # print(fibonacci_reduce(5))
 
-    o = Rectangle(10, 20)
-    print(o(30))
+    # cl_decorated(33)
+
+    r = Rectangle(10, 20)
+    print(r.area())
+    r.message("Test message")
