@@ -359,14 +359,12 @@ def timed(n: int = 1) -> float:
         @wraps(fn)
         def inner(*args, **kwargs):
             elapsed_total = 0
-            elapsed_count = 0
 
             for i in range(n):
                 start = perf_counter()
                 result = fn(*args, **kwargs)
                 end = perf_counter()
                 elapsed_total += end - start
-                elapsed_count += 1
 
             args_ = [str(a) for a in args]
             kwargs_ = ["{0}={1}".format(k, v) for (k, v) in kwargs.items()]
@@ -374,7 +372,7 @@ def timed(n: int = 1) -> float:
             args_str = ",".join(all_args)
 
             print("{0}({1}) took {2:.6f}s to run through {3} executions.".format(
-                fn.__name__, args_str, elapsed_total / elapsed_count, elapsed_count))
+                fn.__name__, args_str, elapsed_total / n, n))
 
             return result
         return inner
