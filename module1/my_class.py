@@ -4,7 +4,7 @@ class Rectangle:
         self.height = height
 
     @property
-    def width(self):
+    def width(self) -> int:
         return self._width
 
     @width.setter
@@ -15,7 +15,7 @@ class Rectangle:
             self._width = value
 
     @property
-    def height(self):
+    def height(self) -> int:
         return self._height
 
     @height.setter
@@ -45,3 +45,7 @@ class Rectangle:
             return self.area() < other.area()
         else:
             return NotImplemented
+
+    def __call__(self, c):
+        print("Class called: height={0}, width={1}, c={2}".format(self.height, self.width, c))
+        

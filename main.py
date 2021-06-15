@@ -1,9 +1,9 @@
 from functools import partial
 from functools import reduce
 from functools import wraps
+from module1.my_class import *
 
 import random
-import my_class
 
 
 def print_hi(name):
@@ -165,7 +165,7 @@ def basic_methods():
     # for_else()
     # for_loop_2()
 
-    r1 = my_class.Rectangle(10, 20)
+    r1 = Rectangle(10, 20)
     r1.width = 11
     print("Width: ", r1.width)
     print("Area: ", r1.area())
@@ -173,11 +173,11 @@ def basic_methods():
     print(str(r1))
     print(repr(r1))
 
-    r2 = my_class.Rectangle(11, 20)
+    r2 = Rectangle(11, 20)
     print("Same references? (r1 is r2): ", r1 is r2)
     print("Same values? (r1 == r2): ", r1 == r2)
 
-    r3 = my_class.Rectangle(10, 30)
+    r3 = Rectangle(10, 30)
     print("{0} is {1}lower than {2}".format(
         "r1", "" if r1 < r3 else "not ", "r3"))
 
@@ -258,7 +258,6 @@ def list_comprehension():
 # reduce to funkcja agregująca elementy w jeden wynik. W C# to Aggregate z LINQ. Można to przerobić na każdą inną
 # funkcję agregującą z C# LINQ, jak np. Sum, Max, Average. Python zawiera wiele wbudowanych funkcji bazujących na
 # reduce. Przykłady: min, max, sum, any, all
-
 def reduce1():
     l1 = [1, 2, 3, 4]
     print(reduce(lambda x, y: x + y, l1))  # Sum
@@ -348,7 +347,7 @@ def counter(fn):
         return fn(*args, **kwargs)
     return inner
 
-# Sparametryzowany dekorator składa się z: dekoratora zewnętrznego z argumentem (timed(n)), dekoratora właściwego przyjmującego funkcję do dekoracji (inner_decorator(fn)), 
+# Sparametryzowany dekorator składa się z: dekoratora zewnętrznego z argumentem (timed(n)), dekoratora właściwego przyjmującego funkcję do dekoracji (inner_decorator(fn)),
 # a także funkcji wrapującej (inner(*args, **kwargs)).
 def timed(n: int = 1) -> float:
     """Get average execution time of passed function through n executions"""
@@ -383,7 +382,7 @@ def timed(n: int = 1) -> float:
 # Jest to syntax działający jak: decorated_add = counter(timed(decorated_add))
 # parametr n jest domyślnie ustawiony na n=1
 @counter
-@timed() # Sparametryzowany dekorator musi być użyty z nawiasami (nawet z opcjonalnym parametrem)
+@timed()  # Sparametryzowany dekorator musi być użyty z nawiasami (nawet z opcjonalnym parametrem)
 def decorated_add(a, b):
     return a + b
 
@@ -421,4 +420,7 @@ if __name__ == '__main__':
     # Z użyciem functools.wraps wskazuje na poprawną funkcję. Bez wraps wskazuję niepoprawnie na funkcję inner!
     # help(decorated_add)
 
-    print(fibonacci_reduce(5))
+    # print(fibonacci_reduce(5))
+
+    o = Rectangle(10, 20)
+    print(o(30))
