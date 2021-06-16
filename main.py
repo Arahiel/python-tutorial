@@ -385,6 +385,11 @@ if __name__ == '__main__':
 
     # cl_decorated(33)
 
-    r = Rectangle(10, 20)
-    print(r.area())
-    r.message("Test message")
+    # r = Rectangle(10, 20)
+    # print(r.area())
+    # r.message("Test message")
+
+    a = "aaa"
+    print(f"{a}")
+
+
