@@ -1,5 +1,7 @@
 from module2.decorators import log_all
 
+value = "Static value"
+
 @log_all
 class Rectangle:
     def __init__(self, width, height):

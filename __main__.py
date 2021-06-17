@@ -385,6 +385,9 @@ if __name__ == '__main__':
 
     # cl_decorated(33)
 
+    # from module1 import my_class
+    # print(my_class.value)
+
     # r = Rectangle(10, 20)
     # print(r.area())
     # r.message("Test message")
