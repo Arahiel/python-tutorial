@@ -398,3 +398,5 @@ if __name__ == '__main__':
     import my_package
     print(my_package.subpackage_1.module_1.value)
     print(my_package.subpackage_2.value)
+    print(my_package.value) # subpackage_3 value
+    

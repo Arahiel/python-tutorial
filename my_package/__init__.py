@@ -5,3 +5,4 @@ print(f'Importing {__name__}')
 #   code: my_package.my_package.subpackage_1.module_1.value is needed
 from my_package import subpackage_1
 from . import subpackage_2
+from .subpackage_3 import *
