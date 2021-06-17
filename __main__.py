@@ -392,7 +392,9 @@ if __name__ == '__main__':
     # print(r.area())
     # r.message("Test message")
 
-    a = "aaa"
-    print(f"{a}")
+    # a = "aaa"
+    # print(f"{a}")
 
-
+    import my_package
+    print(my_package.subpackage_1.module_1.value)
+    print(my_package.subpackage_2.value)
