@@ -1,6 +1,5 @@
 from functools import partial
 from functools import reduce
-from functools import wraps
 from module1.my_class import *
 from module2.decorators import *
 
@@ -349,9 +348,11 @@ def decorated_add(a, b):
 def fibonacci_reduce(n):
     return reduce(lambda prev, n: (prev[0] + prev[1], prev[0]), range(n), (1, 0))[0]
 
+
 @DecoratorClass(10, 20)
 def cl_decorated(x):
     print("Function: {0}".format(x))
+
 
 if __name__ == '__main__':
     # basic_methods()
@@ -398,5 +399,4 @@ if __name__ == '__main__':
     import my_package
     print(my_package.subpackage_1.module_1.value)
     print(my_package.subpackage_2.value)
-    print(my_package.value) # subpackage_3 value
-    
+    print(my_package.value)  # subpackage_3 value
