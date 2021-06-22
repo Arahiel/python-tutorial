@@ -23,11 +23,6 @@ def first_or_default(iterable, predicate = lambda x: True):  # Duplicate from __
     return next((x for x in iterable if predicate(x)), None)
 
 
-# def test_first_or_default_returns_first_element_in_iterable_fixture_source(iterables_source):
-#     for it in iterables_source:
-#         assert
-
-
 @pytest.mark.basic
 def test_marked_basic():
     assert 2 > 1
