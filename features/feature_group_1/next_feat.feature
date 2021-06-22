@@ -5,5 +5,5 @@ Scenario: Passed scenario
     Then I pass test
 
 Scenario: Failed scenario
-    Given I print hard-coded Test
+    Given I print TestFailed parameter value
     Then I fail test
