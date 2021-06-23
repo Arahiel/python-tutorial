@@ -1,9 +1,12 @@
 from functools import partial
 from functools import reduce
+from io import TextIOWrapper
+from datetime import datetime, timedelta
 from module1.my_class import *
 from module2.decorators import *
 
 import random
+import re
 
 
 def print_hi(name):
@@ -354,6 +357,51 @@ def cl_decorated(x):
     print("Function: {0}".format(x))
 
 
+def regex():
+    text = """The rain in Spain1;
+    The rain in Spain2,
+    The rain3 in Spain3."""
+
+    match = re.search("\S+ai\S+", text, re.RegexFlag.MULTILINE)
+    print(match.group())
+
+    matches = re.findall("\S+ai\S+", text, re.RegexFlag.MULTILINE)
+    print(matches)
+
+    s = list(filter(lambda x: not x.isspace(), re.split(
+        r"\s+", text, flags=re.RegexFlag.MULTILINE)))
+    print(s)
+
+    result_string = re.sub(
+        r"(?<=\s)([a-z])", lambda x: x.group().upper(), text, flags=re.RegexFlag.MULTILINE)
+    print(result_string)
+
+
+def file_handling():
+    with open("text.txt", encoding="utf-8", mode="r") as input :
+        with open("output.txt", encoding="utf-8", mode="w") as output:
+            wait_for_file_to_be_unlocked(output, timedelta(seconds=10))
+            for index, line in enumerate( input ):
+                output.write(f"{index}: {line.upper()}")
+
+def wait_for_file_to_be_unlocked(file_stream: TextIOWrapper, timeout: timedelta) -> bool:
+    """Wait until file is unlocked or timeout is reached.\n
+    Returns True if file was unlocked in time."""
+    condition = (file_stream.writable() if "w" in file_stream.mode else True) and (file_stream.readable() if "r" in file_stream.mode else True) 
+    start = datetime.now()
+    timeouted = False
+
+    while not condition:
+        condition = (file_stream.writable() if "w" in file_stream.mode else True) and (file_stream.readable() if "r" in file_stream.mode else True)
+        end = datetime.now()
+        timeouted = end - start >= timeout
+        if timeouted:
+            break
+
+    if timeouted:
+        raise TimeoutError(f"Waiting for file to be unlocked exceeded specified timeout {timeout.seconds}s")
+
+
 if __name__ == '__main__':
     # basic_methods()
     # unpacking()
@@ -396,7 +444,10 @@ if __name__ == '__main__':
     # a = "aaa"
     # print(f"{a}")
 
-    import my_package
-    print(my_package.subpackage_1.module_1.value)
-    print(my_package.subpackage_2.value)
-    print(my_package.value)  # subpackage_3 value
+    # import my_package
+    # print(my_package.subpackage_1.module_1.value)
+    # print(my_package.subpackage_2.value)
+    # print(my_package.value)  # subpackage_3 value
+
+    # regex()
+    file_handling()
