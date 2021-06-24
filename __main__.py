@@ -3,6 +3,7 @@ from functools import reduce
 from io import TextIOWrapper
 from datetime import datetime, timedelta
 from module1.my_class import *
+import parsers
 from module2.decorators import *
 
 import random
@@ -450,4 +451,7 @@ if __name__ == '__main__':
     # print(my_package.value)  # subpackage_3 value
 
     # regex()
-    file_handling()
+    # file_handling()
+
+    p = parsers.PdfParser()
+    e = parsers.EmailParser()
