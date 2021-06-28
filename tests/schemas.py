@@ -18,7 +18,6 @@ pet = {
                                 "type": "string"
                             }
                         },
-                "required": ["id", "name"]
             },
             "name": {
                 "type": "string"
